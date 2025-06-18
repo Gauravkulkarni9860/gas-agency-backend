@@ -1,10 +1,8 @@
-const asyncHandler = require("express-async-handler");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const User = require("../models/userModel");
-const { cylinderCategoryList, cylinderTypeList } = require("../constants");
-const cylinderCategoryModel = require("../models/cylinderCategoryModel");
-const cylinderTypeModel = require("../models/cylinderTypeModel");
+import asyncHandler from "express-async-handler";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { User, CylinderCategoryData, CylinderTypeData } from "../models";
+import { cylinderCategoryList, cylinderTypeList } from "../constants";
 
 // @desc Register user
 // @route POST /api/users/register
@@ -41,7 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
       };
     });
 
-    const insertedCategoryList = await cylinderCategoryModel.insertMany(
+    const insertedCategoryList = await CylinderCategoryData.insertMany(
       categoryList
     );
 
@@ -51,11 +49,11 @@ const registerUser = asyncHandler(async (req, res) => {
       );
       return {
         ...item,
-        category_id: category._id,
+        category_id: category?._id ?? "",
       };
     });
 
-    await cylinderTypeModel.insertMany(typesList);
+    await CylinderTypeData.insertMany(typesList);
 
     res.status(201).json({
       user_id: user.id,
@@ -92,7 +90,7 @@ const loginUser = asyncHandler(async (req, res) => {
     user_type: user.user_type,
   };
 
-  const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECERT, {
+  const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECERT ?? "", {
     expiresIn: "15m",
   });
 
@@ -133,4 +131,4 @@ const getUser = asyncHandler(async (req, res) => {
   res.status(200).json({ user: data });
 });
 
-module.exports = { registerUser, loginUser, getUser };
+export { registerUser, loginUser, getUser };

@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const cylinderCategoryDataSchema = mongoose.Schema({
+const cylinderCategoryDataSchema = new mongoose.Schema({
   user_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -17,7 +17,7 @@ const cylinderCategoryDataSchema = mongoose.Schema({
   isActive: Boolean,
 });
 
-module.exports = mongoose.model(
+export default mongoose.model(
   "CylinderCategoryData",
   cylinderCategoryDataSchema
 );

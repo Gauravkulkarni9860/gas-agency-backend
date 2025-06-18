@@ -1,15 +1,15 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
-const {
+import {
   registerUser,
   loginUser,
   getUser,
-} = require("../controllers/userController");
-const validateToken = require("../middleware/validateTokenHandler");
+} from "../controllers/userController";
+import validateToken from "../middleware/validateTokenHandler";
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/user/:id", validateToken, getUser);
 
-module.exports = router;
+export default router;
